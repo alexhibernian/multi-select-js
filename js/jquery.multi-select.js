@@ -67,6 +67,9 @@
         that.$container.append(that.$selectionContainer);
         ms.after(that.$container);
 
+        that.$selectableUl.css("height", that.options.selectBoxHeight);
+        that.$selectionUl.css("height", that.options.selectBoxHeight);
+
         that.activeMouse(that.$selectableUl);
         that.activeKeyboard(that.$selectableUl);
 
@@ -372,7 +375,7 @@
         selectables.addClass('ms-selected').hide();
         selections.addClass('ms-selected').show();
 
-        options.attr('selected', 'selected');
+        options.prop('selected', true);
 
         that.$container.find(that.elemsSelector).removeClass('ms-hover');
 
@@ -393,7 +396,7 @@
             }
           });
         } else {
-          if (that.options.keepOrder && method !== 'init'){
+          if (that.options.keepOrder != true && method !== 'init'){
             var selectionLiLast = that.$selectionUl.find('.ms-selected');
             if((selectionLiLast.length > 1) && (selectionLiLast.last().get(0) != selections.get(0))) {
               selections.insertAfter(selectionLiLast.last());
@@ -454,7 +457,7 @@
       var ms = this.$element,
           values = ms.val();
 
-      ms.find('option:not(":disabled")').attr('selected', 'selected');
+      ms.find('option:not(":disabled")').prop('selected',true);
       this.$selectableUl.find('.ms-elem-selectable').filter(':not(.'+this.options.disabledClass+')').addClass('ms-selected').hide();
       this.$selectionUl.find('.ms-optgroup-label').show();
       this.$selectableUl.find('.ms-optgroup-label').hide();
@@ -473,7 +476,7 @@
       var ms = this.$element,
           values = ms.val();
 
-      ms.find('option').removeAttr('selected');
+      ms.find('option').prop('selected',false);
       this.$selectableUl.find('.ms-elem-selectable').removeClass('ms-selected').show();
       this.$selectionUl.find('.ms-optgroup-label').hide();
       this.$selectableUl.find('.ms-optgroup-label').show();
@@ -483,6 +486,10 @@
       if (typeof this.options.afterDeselect === 'function') {
         this.options.afterDeselect.call(this, values);
       }
+    },
+    'clear_all': function () {
+      this.$selectableUl.html('');
+      this.$selectionUl.html('');
     },
 
     sanitize: function(value){
@@ -526,7 +533,8 @@
     disabledClass : 'disabled',
     dblClick : false,
     keepOrder: false,
-    cssClass: ''
+    cssClass: '',
+    selectBoxHeight: '200px'
   };
 
   $.fn.multiSelect.Constructor = MultiSelect;
